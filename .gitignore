@@ -1,0 +1,8 @@
+obj
+bin
+*.pac
+*.bin
+project.lock.json
+#/.vs/restore.dg
+#/.vs/PolarCore/v14/.suo
+/.vs
