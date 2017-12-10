@@ -6,3 +6,5 @@ project.lock.json
 #/.vs/restore.dg
 #/.vs/PolarCore/v14/.suo
 /.vs
+databases
+/packages
