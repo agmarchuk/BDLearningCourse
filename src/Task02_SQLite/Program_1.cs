@@ -19,9 +19,9 @@ namespace Task02_SQLite
 
             long npersons = 40000;
 
-            string path = "../../../";
+            string path = "../../../../";
 
-            string filename = path + "databases/test.db3";
+            string filename = path + "Databases/test.db3";
 
             if (!System.IO.File.Exists(filename))
             {

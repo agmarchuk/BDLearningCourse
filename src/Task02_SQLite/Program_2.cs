@@ -21,7 +21,7 @@ namespace Task02_SQLite
             string number = args.Length == 0? null : args.FirstOrDefault(s => char.IsDigit(s[0]));
             int npersons = number==null? 40000: Int32.Parse(number);
 
-            string path = "../../../";
+            string path = "../../../../";
 
             string filename = path + "databases/test.db3";
 

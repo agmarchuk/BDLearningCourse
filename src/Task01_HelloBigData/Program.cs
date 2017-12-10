@@ -14,7 +14,7 @@ namespace Task01_HelloBigData
             BinaryReader br = new BinaryReader(fs);
 
             long nelements = 100000000;
-            bool toload = false;
+            bool toload = true;
 
             if (toload)
             {
