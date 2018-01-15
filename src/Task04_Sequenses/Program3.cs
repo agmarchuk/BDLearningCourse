@@ -10,33 +10,25 @@ namespace Task04_Sequenses
 {
     partial class Program
     {
-        public static void Main2(string[] args)
+        public static void Main3(string[] args)
         {
             Random rnd = new Random();
-            Console.WriteLine("Start Task04_Sequenses_Main2");
+            Console.WriteLine("Start Task04_Sequenses_Main3");
             System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
             PType tp_person = new PTypeRecord(
                 new NamedType("id", new PType(PTypeEnumeration.integer)),
                 new NamedType("name", new PType(PTypeEnumeration.sstring)),
-                new NamedType("rage", new PType(PTypeEnumeration.real)));
+                new NamedType("age", new PType(PTypeEnumeration.real)));
 
             TableView tab_person = new TableView(path + "tab_person.pac", tp_person);
-            Func<object, int> person_code_keyproducer = v => (int)((object[])((object[])v)[1])[0];
-            IndexKeyImmutable<int> ind_arr_person = new IndexKeyImmutable<int>(path + "person_ind")
+            IndexViewImmutable<string> name_index = new IndexViewImmutable<string>(path + "name_index.pac")
             {
                 Table = tab_person,
-                KeyProducer = person_code_keyproducer,
-                Scale = null
+                KeyProducer = v => (string)((object[])((object[])v)[1])[1],
+                tosort = true
             };
-            //ind_arr_person.Scale = new ScaleCell(path + "person_ind") { IndexCell = ind_arr_person.IndexCell };
-            //IndexDynamic<int, IndexKeyImmutable<int>> index_person = new IndexDynamic<int, IndexKeyImmutable<int>>(true)
-            //{
-            //    Table = tab_person,
-            //    IndexArray = ind_arr_person,
-            //    KeyProducer = person_code_keyproducer
-            //};
-            IndexDynamic<int, IndexKeyImmutable<int>> index_person = new IndexDynamic<int, IndexKeyImmutable<int>>(true, ind_arr_person);
-            tab_person.RegisterIndex(index_person);
+            IndexDynamic<string, IndexViewImmutable<string>> index_person_name = new IndexDynamic<string, IndexViewImmutable<string>>(false, name_index);
+            tab_person.RegisterIndex(index_person_name);
 
             int nelements = 1_000_000;
             bool toload = true; // Загружать или нет новую базу данных
@@ -68,7 +60,7 @@ namespace Task04_Sequenses
 
             // Проверим работу
             int search_key = nelements * 2 / 3;
-            var ob = index_person.GetAllByKey(search_key)
+            var ob = index_person_name.GetAllByKey("=" + search_key +"=")
                 .Select(ent => ((object[])ent.Get())[1])
                 .FirstOrDefault();
             if (ob == null) throw new Exception("Didn't find person " + search_key);
@@ -80,7 +72,7 @@ namespace Task04_Sequenses
             for (int i = 0; i < nprobe; i++)
             {
                 search_key = rnd.Next(nelements) + 1;
-                ob = index_person.GetAllByKey(search_key)
+                ob = index_person_name.GetAllByKey("=" + search_key + "=")
                     .Select(ent => ((object[])ent.Get())[1])
                     .FirstOrDefault();
                 if (ob == null) throw new Exception("Didn't find person " + search_key);
@@ -89,7 +81,17 @@ namespace Task04_Sequenses
             sw.Stop();
             Console.WriteLine($"Duration for {nprobe} search in {nelements} elements: {sw.ElapsedMilliseconds} ms");
 
-
+            string search_string = "=66666";
+            var query = index_person_name.GetAllByLevel((PaEntry entry) => 
+            {
+                var name = (string)((object[])((object[])entry.Get())[1])[1];
+                if (name.StartsWith(search_string)) return 0;
+                return name.CompareTo(search_string);
+            });
+            foreach (object v in query.Select(entry => ((object[])entry.Get())[1]))
+            {
+                Console.WriteLine(tp_person.Interpret(v));
+            }
         }
     }
 }

@@ -6,18 +6,24 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Polar.DB" Version="1.0.0" />
+    <PackageReference Include="Polar.Cells" Version="1.0.0" />
+    <PackageReference Include="Polar.CellIndexes" Version="1.0.0" />
+    <PackageReference Include="Polar.PagedStreams" Version="1.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+  <!--
     <Reference Include="Polar.CellIndexes">
-      <HintPath>..\..\Resources\DLLs\PolarDBdlls\Release\Polar.CellIndexes.dll</HintPath>
+      <HintPath>..\..\..\..\devexperiments\PolarDB\src\Polar.CellIndexes\bin\Release\netstandard2.0\Polar.CellIndexes.dll</HintPath>
     </Reference>
     <Reference Include="Polar.Cells">
       <HintPath>..\..\Resources\DLLs\PolarDBdlls\Release\Polar.Cells.dll</HintPath>
     </Reference>
-    <Reference Include="Polar.DB">
-      <HintPath>..\..\Resources\DLLs\PolarDBdlls\Release\Polar.DB.dll</HintPath>
-    </Reference>
     <Reference Include="Polar.PagedStreams">
       <HintPath>..\..\Resources\DLLs\PolarDBdlls\Release\Polar.PagedStreams.dll</HintPath>
     </Reference>
+    -->
   </ItemGroup>
 
 </Project>
