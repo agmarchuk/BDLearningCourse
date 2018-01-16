@@ -7,7 +7,7 @@
 
   <ItemGroup>
     <PackageReference Include="Polar.Cells" Version="1.0.0" />
-    <PackageReference Include="Polar.DB" Version="1.0.0" />
+    <PackageReference Include="Polar.DB" Version="1.0.1" />
   </ItemGroup>
 
 </Project>
