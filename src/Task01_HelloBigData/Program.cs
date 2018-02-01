@@ -13,7 +13,7 @@ namespace Task01_HelloBigData
             BinaryWriter bw = new BinaryWriter(fs);
             BinaryReader br = new BinaryReader(fs);
 
-            long nelements = 100000000;
+            long nelements = 100_000_000;
             bool toload = true;
 
             if (toload)
@@ -44,7 +44,7 @@ namespace Task01_HelloBigData
 
             sw.Restart();
             Random rnd = new Random();
-            long nreads = 1000000;
+            long nreads = 100_000;
             for (long ii = 0; ii < nreads; ii++)
             {
                 long ind = rnd.Next((int)nelements);
