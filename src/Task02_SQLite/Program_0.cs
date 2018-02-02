@@ -10,7 +10,8 @@ namespace Task02_SQLite
     {
         public static void Main(string[] args)
         {
-            Main_2(args);
+            Main_1(args);
+            //Main_2(args);
         }
     }
 }

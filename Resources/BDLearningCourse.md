@@ -409,9 +409,9 @@ namespace Task04_Sequenses
     PaCell cell = new PaCell(new PTypeSequence(tp_rec), "../../Databases/" + "people.pac", false);
 ```
 
-В режимк ввода, ячейку очищаем, заполняем путой последовательностью, а далее в цикле заполняем записями, соответствующими тесту Фототека. Напр. так:
+В режимк ввода, ячейку очищаем, заполняем пустой последовательностью, а далее в цикле заполняем записями, соответствующими тесту Фототека. Напр. так:
 ```
-    int npersons = 1000_000;
+    int npersons = 1_000_000;
     Random rnd = new Random();
     Console.WriteLine("Start Task04: Main1");
     bool toload = true;
