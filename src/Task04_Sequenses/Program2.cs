@@ -29,12 +29,6 @@ namespace Task04_Sequenses
                 Scale = null
             };
             //ind_arr_person.Scale = new ScaleCell(path + "person_ind") { IndexCell = ind_arr_person.IndexCell };
-            //IndexDynamic<int, IndexKeyImmutable<int>> index_person = new IndexDynamic<int, IndexKeyImmutable<int>>(true)
-            //{
-            //    Table = tab_person,
-            //    IndexArray = ind_arr_person,
-            //    KeyProducer = person_code_keyproducer
-            //};
             IndexDynamic<int, IndexKeyImmutable<int>> index_person = new IndexDynamic<int, IndexKeyImmutable<int>>(true, ind_arr_person);
             tab_person.RegisterIndex(index_person);
 

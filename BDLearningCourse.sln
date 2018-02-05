@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27130.2027
+VisualStudioVersion = 15.0.27130.2010
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Task01_HelloBigData", "src\Task01_HelloBigData\Task01_HelloBigData.csproj", "{408B1241-D364-4E88-830C-8D0E147DFAB1}"
 EndProject
@@ -17,6 +17,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Task03_PolarDB", "src\Task03_PolarDB\Task03_PolarDB.csproj", "{530E12B4-9E8D-478B-8A27-390296BB862B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Task04_Sequenses", "src\Task04_Sequenses\Task04_Sequenses.csproj", "{1A0E943E-91D6-4A34-8693-20F5F01B376C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Task05_XML", "src\Task05_XML\Task05_XML.csproj", "{AF5CE99A-0599-4CE7-8B04-BF08C94DB471}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -40,6 +42,10 @@ Global
 		{1A0E943E-91D6-4A34-8693-20F5F01B376C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1A0E943E-91D6-4A34-8693-20F5F01B376C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1A0E943E-91D6-4A34-8693-20F5F01B376C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AF5CE99A-0599-4CE7-8B04-BF08C94DB471}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF5CE99A-0599-4CE7-8B04-BF08C94DB471}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF5CE99A-0599-4CE7-8B04-BF08C94DB471}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF5CE99A-0599-4CE7-8B04-BF08C94DB471}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

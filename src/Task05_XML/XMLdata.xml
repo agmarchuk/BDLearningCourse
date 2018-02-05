@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<db>
+  <person id="p001">
+    <name>Иванов</name>
+    <age>22</age>
+  </person>
+  <person id="p002">
+    <name>Петров</name>
+    <age>23</age>
+  </person>
+  <person id="p003">
+    <name>Сидоров</name>
+    <age>21</age>
+  </person>
+  <person id="p004">
+    <name>Пупкин Вася</name>
+    <age>55</age>
+  </person>
+</db>
