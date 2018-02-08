@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -25,9 +26,19 @@ namespace Task06_Web
                 app.UseDeveloperExceptionPage();
             }
 
+            XElement db = XElement.Load("../../Databases/db3.xml");
+
             app.Run(async (context) =>
             {
-                await context.Response.WriteAsync("<!DOCTYPE html><html><body><h1>Start Task06_Web</h1>"+ System.DateTime.Now +"</body></html>");
+                XElement html = new XElement("html", 
+                    new XElement("head", new XElement("meta", new XAttribute("charset", "utf-8"), " ")),
+                    new XElement("body",
+                        new XElement("h1", "Start Web test"),
+                        new XElement("div", "DateTime: " + DateTime.Now.ToString()),
+                        new XElement("div", "Всего элементов: " + db.Elements().Count()),
+                    null));
+                
+                await context.Response.WriteAsync(html.ToString());
             });
         }
     }
