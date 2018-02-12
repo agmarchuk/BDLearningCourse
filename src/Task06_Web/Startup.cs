@@ -37,7 +37,27 @@ namespace Task06_Web
                         new XElement("div", "DateTime: " + DateTime.Now.ToString()),
                         new XElement("div", "Всего элементов: " + db.Elements().Count()),
                     null));
-                
+                string id = context.Request.Query["id"];
+                html = new XElement("html",
+                    new XElement("head", new XElement("meta", new XAttribute("charset", "utf-8"), " ")),
+                    new XElement("body",
+                        new XElement("h1", "Database Web viewer"),
+                        id == null ? 
+                            new XElement("div",
+                                new XElement("div", "Всего элементов: " + db.Elements().Count()),
+                                db.Elements().Take(100).Select(el => new XElement("div",
+                                    new XElement("a", new XAttribute("href", "?id=" + el.Attribute("id").Value), el.Element("name").Value))))
+                          : new XElement("div", 
+                                db.Elements()
+                                .Select(el => new object[] { el.Attribute("id").Value, el.Element("name").Value, el.Element("age").Value })
+                                .Where(tri => (string)tri[0] == id)
+                                .Select(tri => new XElement("div", 
+                                    new XElement("div", "id=" + (string)tri[0]),
+                                    new XElement("div", "name=" + (string)tri[1]),
+                                    new XElement("div", " age=" + (string)tri[2])))
+                                .First()) 
+                          ,
+                    null));
                 await context.Response.WriteAsync(html.ToString());
             });
         }

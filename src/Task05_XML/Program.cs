@@ -40,7 +40,7 @@ namespace Task05_XML
                 Enumerable.Range(1, npersons)
                 .Select(i => new XElement("person",
                     new XAttribute("id", "p" + i),
-                    new XElement("name", "=p" + i + "="),
+                    new XElement("name", "Пупкин " + i),
                     new XElement("age", "" + rnd.NextDouble() * 150))));
             foreach (var el in db3.Elements().Skip(1000).Take(5))
             {
