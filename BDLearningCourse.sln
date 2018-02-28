@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27130.2010
+VisualStudioVersion = 15.0.27130.2027
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Task01_HelloBigData", "src\Task01_HelloBigData\Task01_HelloBigData.csproj", "{408B1241-D364-4E88-830C-8D0E147DFAB1}"
 EndProject
@@ -21,6 +21,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Task05_XML", "src\Task05_XML\Task05_XML.csproj", "{AF5CE99A-0599-4CE7-8B04-BF08C94DB471}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Task06_Web", "src\Task06_Web\Task06_Web.csproj", "{0289C52D-3138-44FD-9569-78FBCA34B26A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Task07_MongoDB", "src\Task07_MongoDB\Task07_MongoDB.csproj", "{5B036A81-B1AF-42BB-A965-91EA07FEDE81}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -52,6 +54,10 @@ Global
 		{0289C52D-3138-44FD-9569-78FBCA34B26A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0289C52D-3138-44FD-9569-78FBCA34B26A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0289C52D-3138-44FD-9569-78FBCA34B26A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5B036A81-B1AF-42BB-A965-91EA07FEDE81}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5B036A81-B1AF-42BB-A965-91EA07FEDE81}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5B036A81-B1AF-42BB-A965-91EA07FEDE81}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5B036A81-B1AF-42BB-A965-91EA07FEDE81}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
