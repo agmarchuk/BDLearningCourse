@@ -10,10 +10,10 @@ namespace Task04_Sequenses
 {
     partial class Program
     {
-        public static void Main4(string[] args)
+        public static void Main5(string[] args)
         {
             Random rnd = new Random();
-            Console.WriteLine("Start Task04_Sequenses_Main3");
+            Console.WriteLine("Start Task04_Sequenses_Main4");
             System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
             PType tp_person = new PTypeRecord(
                 new NamedType("id", new PType(PTypeEnumeration.integer)),
@@ -21,12 +21,15 @@ namespace Task04_Sequenses
                 new NamedType("age", new PType(PTypeEnumeration.real)));
 
             TableView tab_person = new TableView(path + "tab_person.pac", tp_person);
-            IndexViewImmutable<string> name_index = new IndexViewImmutable<string>(path + "name_index.pac")
+            IndexHalfkeyImmutable<string> name_index = new IndexHalfkeyImmutable<string>(path + "name_hindex.pac")
             {
                 Table = tab_person,
-                KeyProducer = v => (string)((object[])((object[])v)[1])[1]
+                KeyProducer = v => (string)((object[])((object[])v)[1])[1],
+                HalfProducer = v => Hashfunctions.HashRot13(v)
             };
-            IndexDynamic<string, IndexViewImmutable<string>> index_person_name = new IndexDynamic<string, IndexViewImmutable<string>>(false, name_index);
+            name_index.Scale = new ScaleCell(path + "person_ind") { IndexCell = name_index.IndexCell };
+            IndexDynamic<string, IndexHalfkeyImmutable<string>> index_person_name = 
+                new IndexDynamic<string, IndexHalfkeyImmutable<string>>(false, name_index);
             tab_person.RegisterIndex(index_person_name);
 
             int nelements = 1_000_000;
@@ -54,16 +57,20 @@ namespace Task04_Sequenses
             }
             else
             {
+                sw.Restart();
                 tab_person.Warmup();
+                sw.Stop();
+                Console.WriteLine("Warmup ok. duration for {0} elements: {1} ms", nelements, sw.ElapsedMilliseconds);
             }
 
             // Проверим работу
             int search_key = nelements * 2 / 3;
-            var ob = index_person_name.GetAllByKey("=" + search_key +"=")
+            var ob = index_person_name.GetAllByKey("=" + search_key + "=")
                 .Select(ent => ((object[])ent.Get())[1])
                 .FirstOrDefault();
             if (ob == null) throw new Exception("Didn't find person " + search_key);
             Console.WriteLine("Person {0} has name {1}", search_key, ((object[])ob)[1]);
+
 
             // Засечем скорость выборок
             int nprobe = 1000;
@@ -80,17 +87,6 @@ namespace Task04_Sequenses
             sw.Stop();
             Console.WriteLine($"Duration for {nprobe} search in {nelements} elements: {sw.ElapsedMilliseconds} ms");
 
-            string search_string = "=66666";
-            var query = index_person_name.GetAllByLevel((PaEntry entry) => 
-            {
-                var name = (string)((object[])((object[])entry.Get())[1])[1];
-                if (name.StartsWith(search_string)) return 0;
-                return name.CompareTo(search_string);
-            });
-            foreach (object v in query.Select(entry => ((object[])entry.Get())[1]))
-            {
-                Console.WriteLine(tp_person.Interpret(v));
-            }
         }
     }
 }

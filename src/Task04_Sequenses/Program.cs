@@ -9,7 +9,7 @@ namespace Task04_Sequenses
         static string path = "../../Databases/";
         static void Main(string[] args)
         {
-            Main4(args);
+            Main2(args);
         }
         public static void Main1(string[] args)
         {
