@@ -781,11 +781,82 @@ dotnet new web
 Украшение надо осуществлять не в сторону цветов, шрифтов, навороченных стилей и т.д., а в сторону лаконичной, но понятной визуализации именно того, что нужно.
 
 ## Task07_MongoDB - NoSQL-СУБД класса хранилищя документов
-  
+MongoDB является заметным представителем так называемых NoSQL систем управления базами данных. NoSQL "переводится" и как "не" SQL и как Not Only SQL. В данном случае, это точно "не" - модель данных выстроена по принципу key-value, где ключи - автоматически генерируются и часто скрыты для пользователя, а значения - произвольные JSON-объекты. 
 
+Установить MongoDB можно с сайта https://www.mongodb.com
+```
+запуск сервера
+mongod.exe --dbpath D:\WinApps\mongodata   
 
+запуск клиента
+mongo.exe
 
+команды клиента:
+db.inventory.insert({ item: "journal", qty: 25, status: "A", size: { h: 14, w: 21, uom: "cm" }, tags: [ "blank", "red" ] });
+db.inventory.insert({ item: "notebook", qty: 50, status: "A", size: { h: 8.5, w: 11, uom: "in" }, tags: [ "red", "blank" ] });
+db.inventory.insert({ item: "paper", qty: 100, status: "D", size: { h: 8.5, w: 11, uom: "in" }, tags: [ "red", "blank", "plain" ] });
+db.inventory.insert({ item: "planner", qty: 75, status: "D", size: { h: 22.85, w: 30, uom: "cm" }, tags: [ "blank", "red" ] });
+db.inventory.insert({ item: "postcard", qty: 45, status: "A",
+       size: { h: 10, w: 15.25, uom: "cm" }, tags: [ "blue" ] });
 
+db.inventory.find();
+db.inventory.find({status:"D"});
+
+db.inventory.find({ tags: "red" });
+```
+
+Теперь создадим проект. Сделаем это в VisualCode (желающие могут это сделать в VisualStudio). Создадим директорию для проекта, в нем создадим пустой консольный проект dotnet new console.
+
+Далее, надо подгрузить адаптер. Это делается редактированием конфигурационного файла проекта. В нем надо вставить строчки:
+```
+  <ItemGroup>
+    <PackageReference Include="MongoDB.Driver" Version="2.5.0" />
+    <PackageReference Include="MongoDB.Driver.Core" Version="2.5.0" />
+    <PackageReference Include="MongoDB.Bson" Version="2.5.0" />
+    <PackageReference Include="System.Reflection.Emit.Lightweight" Version="4.3.0" />
+  </ItemGroup>
+```
+Теперь будем создавать программу. Вставим в Program.cs использование пространств имен:
+```
+using MongoDB.Driver;
+using MongoDB.Driver.Core;
+using MongoDB.Bson;
+```
+После этого, можно подключаться к базе данных:
+```
+    // коннектимся к серверному приложению через порт
+    var client = new MongoClient("mongodb://localhost:27017");
+    // объявляем рабочую базу данных
+    var database = client.GetDatabase("foo");
+    // используем или создаем новую коллекцию персон
+    var collection = database.GetCollection<BsonDocument>("persons");
+```
+```
+    int nelements = 1000;
+    var documents = Enumerable.Range(0, nelements).Select(i => new BsonDocument()
+        {
+            { "id", nelements - i },
+            { "name", "Pupkin " + (nelements - i) },
+            { "age", 33 }
+        });
+    collection.InsertMany(documents);
+    // посмотреть число введенных элементов
+    Console.WriteLine(collection.Count(new BsonDocument()));
+```
+При повторе, число элементов растет. Чтобы их не накапливать, перед вводом полезно очистить коллекцию:
+```
+    database.DropCollection("persons");
+```
+Теперь поищем элементы по заданному идентификатору:
+```
+    int id = nelements * 2 / 3;
+    var doc = collection.Find(Builders<BsonDocument>.Filter.Eq("id", id)).First();
+    Console.WriteLine(doc);
+```
+Когда вы обнаружите, что поиск выполняется не очень быстро, имеет смысл создать индекс для поля id:
+```
+    collection.Indexes.CreateOne(new BsonDocument("id", 1));
+```
 
 
 ```
