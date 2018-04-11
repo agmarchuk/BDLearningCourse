@@ -10,3 +10,5 @@ databases
 /packages
 /src/Task02_SQLite/packages.config
 /.vscode
+/src/Task08_JSON/*.json
+/src/Task08_JSON/*.bson

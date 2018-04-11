@@ -17,7 +17,7 @@ namespace Task07_MongoDB
             // объявляем рабочую базу данных
             var database = client.GetDatabase("foo");
 
-            bool toload = false;
+            bool toload = true;
 
             // чистим предыдущее состояние коллекции персон
             if (toload) database.DropCollection("persons");
@@ -48,7 +48,7 @@ namespace Task07_MongoDB
             Console.WriteLine(collection.Count(new BsonDocument()));
 
             var doc1 = collection.Find(new BsonDocument()).Skip(nelements * 2 / 3).FirstOrDefault();
-            Console.WriteLine(doc1.ToString());
+            Console.WriteLine(doc1);
 
             var oi = (ObjectId)collection.Find(new BsonDocument()).Skip(666).FirstOrDefault().Values.First();
             Console.WriteLine(oi);
