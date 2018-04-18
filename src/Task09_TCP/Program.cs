@@ -7,18 +7,31 @@ using System.Threading.Tasks;
 
 namespace Task09_TCP
 {
-    class Program
+    partial class Program
     {
         private static IPAddress host;
         private static int port = 5000;
         static void Main(string[] args)
         {
-            string sc = args.Any(arg => arg == "client") ? "client" : "service";
-            Console.WriteLine($"Start TCP {sc}");
+            string dagent = "service"; //"client";
+            string arg = args.Length == 0 ? dagent  : args[0];
+            Console.WriteLine($"Start TCP {arg}");
             host = IPAddress.Parse("127.0.0.1");
 
-            if (sc == "service") Service();
-            else if (sc == "client") Client();
+            int variant = 2;
+
+            if (variant == 1)
+            {
+                if (arg == "service") Service();
+                else if (arg == "client") Client();
+                else if (arg == "test") TestClient();
+            }
+            else
+            {
+                if (arg == "service") Service2();
+                else if (arg == "client") Client2();
+            }
+
 
             var k = Console.ReadKey();
         }
@@ -36,13 +49,13 @@ namespace Task09_TCP
                 using (TcpClient client = await listener.AcceptTcpClientAsync())
                 using (var stream = client.GetStream())
                 {
-                    Console.WriteLine("Client accepted");
+                    //Console.WriteLine("Client accepted");
 
                     // принимаем запрос
                     byte[] buff = new byte[1000];
                     int nbytes = stream.Read(buff, 0, buff.Length);
                     string received = System.Text.Encoding.UTF8.GetString(buff, 0, nbytes);
-                    Console.WriteLine(received);
+                    //Console.WriteLine(received);
 
                     // посылаем ответ
                     string resp_message = @"HTTP/1.0 200 OK
@@ -50,6 +63,7 @@ Content-Type: text/plain
 Content-Length: 6
 
 Hello!";
+                    resp_message = "OK.";
                     byte[] resp_arr = System.Text.Encoding.UTF8.GetBytes(resp_message);
                     stream.Write(resp_arr, 0, resp_arr.Length);
                 }
@@ -82,6 +96,21 @@ Hello!";
                 }
             }
             return response;
+        }
+        private static void TestClient()
+        {
+            System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
+            sw.Restart();
+            for (int i = 0; i < 1000; i++)
+            {
+                var asker = Ask("from client");
+                var qu = Task<string>.Run(() => asker);
+                //Console.Write($"{qu.Result} ");
+            }
+            Console.WriteLine();
+            sw.Stop();
+            Console.WriteLine($"test ok. duration={sw.ElapsedMilliseconds}");
+
         }
 
     }
