@@ -11,7 +11,7 @@ namespace Task07_MongoDB
         static void Main(string[] args)
         {
             System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
-            Console.WriteLine("Hello World!");
+            Console.WriteLine("Start MongoDB testing");
             // коннектимся к серверному приложению через порт
             var client = new MongoClient("mongodb://localhost:27017");
             // объявляем рабочую базу данных
@@ -31,12 +31,14 @@ namespace Task07_MongoDB
             if (toload)
             {
                 sw.Restart();
+                // перечисление вводимых элементов
                 var documents = Enumerable.Range(0, nelements).Select(i => new BsonDocument()
                     {
                         { "id", nelements - i },
                         { "name", "Pupkin " + (nelements - i) },
                         { "age", 33 }
                     });
+                // ввод элементов по перечислению
                 collection.InsertMany(documents);
                 sw.Stop();
                 Console.WriteLine($"load ok. duration={sw.ElapsedMilliseconds}");
@@ -69,25 +71,6 @@ namespace Task07_MongoDB
             sw.Stop();
             Console.WriteLine($"{ntests} finds ok. duration={sw.ElapsedMilliseconds}");
 
-            bool by_id = false;
-            if (by_id)
-            {
-                var _id_arr = collection.Find(new BsonDocument()).ToCursor().ToList()
-                    .Select(d => d.Values.First())
-                    //.Cast<ObjectId>()
-                    .ToArray();
-                sw.Restart();
-                for (int i = 0; i < ntests; i++)
-                {
-                    int nom = rnd.Next(nelements);
-                    var doc = collection.FindSync(Builders<BsonDocument>.Filter.Eq("_id", _id_arr[nom])).First();
-                    //if (i<10) Console.WriteLine(doc);
-                }
-                sw.Stop();
-                Console.WriteLine($"By _id: {ntests} finds ok. duration={sw.ElapsedMilliseconds}");
-            }
-
-            //ntests = 10;
             sw.Restart();
             for (int i = 0; i < ntests; i++)
             {

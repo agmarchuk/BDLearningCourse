@@ -13,55 +13,81 @@ namespace Task09_TCP
     {
         private static void Service2()
         {
+            var task = StartServerAsync();
+            Task.Run(() => task);
+        }
+        private static async Task StartServerAsync()
+        { 
             TcpListener listener = new TcpListener(host, port);
             listener.Start();
-            var client = listener.AcceptTcpClient();
-            var stream = client.GetStream();
-            byte[] buff = new byte[1000];
-
             while (true)
             {
-                // Принимаем
-                int nbytes = stream.Read(buff, 0, buff.Length);
-                string received = System.Text.Encoding.UTF8.GetString(buff, 0, nbytes);
-                //Console.WriteLine(received);
-                if (received == "exit") break;
+                using (TcpClient client = await listener.AcceptTcpClientAsync())
+                using (var stream = client.GetStream())
+                {
+                    //Console.WriteLine("Client accepted");
 
-                // Посылаем
-                byte[] arr = System.Text.Encoding.ASCII.GetBytes("OK.");
-                stream.Write(arr, 0, arr.Length);
+                    // принимаем запрос
+                    byte[] buff = new byte[1000];
+                    int nbytes = stream.Read(buff, 0, buff.Length);
+                    string received = System.Text.Encoding.UTF8.GetString(buff, 0, nbytes);
+                    //Console.WriteLine(received);
+
+                    // посылаем ответ
+                    string resp_message = @"HTTP/1.0 200 OK
+Content-Type: text/plain
+Content-Length: 6
+
+Hello!";
+                    resp_message = "OK.";
+                    byte[] resp_arr = System.Text.Encoding.UTF8.GetBytes(resp_message);
+                    stream.Write(resp_arr, 0, resp_arr.Length);
+                }
             }
-
-            stream.Close();
-            client.Close();
-            listener.Stop();
         }
+
+
+
         private static void Client2()
         {
-            System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
-            TcpClient client = new TcpClient();
-            client.Connect(host, port);
-            Console.WriteLine("client connected");
-
-            var stream = client.GetStream();
-            byte[] buff = new byte[1000];
-
-            sw.Restart();
-            int nrequ = 10_000;
-            for (int i=0; i<nrequ; i++)
-            {
-                // Посылаем
-                byte[] arr = System.Text.Encoding.ASCII.GetBytes("Hello");
-                stream.Write(arr, 0, arr.Length);
-
-                // Принимаем
-                int nbytes = stream.Read(buff, 0, 3);// buff.Length);
-                string received = System.Text.Encoding.UTF8.GetString(buff, 0, nbytes);
-                //Console.WriteLine(received);
-            }
-            sw.Stop();
-            Console.WriteLine($"{nrequ} requ/resp ok. duration={sw.ElapsedMilliseconds}");
-            //client.Close();
+            var asker = Ask("from client");
+            var qu = Task<string>.Run(() => asker);
+            Console.WriteLine(qu.Result);
         }
+        // Клиент только запрашивает, запрос может сколько-то длиться. 
+        private static async Task<string> Ask(string request)
+        {
+            string response = "noresponse";
+            using (TcpClient client = new TcpClient())
+            {
+                await client.ConnectAsync(host, port);
+                using (NetworkStream stream = client.GetStream())
+                {
+                    // Посылаем
+                    byte[] arr = System.Text.Encoding.ASCII.GetBytes(request);
+                    stream.Write(arr, 0, arr.Length);
+                    // Принимаем
+                    System.IO.TextReader reader = new System.IO.StreamReader(stream, System.Text.Encoding.UTF8);
+                    response = reader.ReadToEnd();
+                }
+            }
+            return response;
+        }
+        private static void TestClient2()
+        {
+            System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
+            sw.Restart();
+            for (int i = 0; i < 1000; i++)
+            {
+                var asker = Ask("from client");
+                var qu = Task<string>.Run(() => asker);
+                //Console.Write($"{qu.Result} ");
+            }
+            Console.WriteLine();
+            sw.Stop();
+            Console.WriteLine($"test ok. duration={sw.ElapsedMilliseconds}");
+
+        }
+
     }
 }
