@@ -30,6 +30,19 @@ namespace Task09_TCP
                 sw.Stop();
                 Console.WriteLine($"duration={sw.ElapsedMilliseconds}");
             }
+            else if (args.Any(s => s == "multiserver"))
+            {
+                Console.WriteLine("Start TCP MultiServer");
+                MultiServer();
+            }
+            else if (args.Any(s => s == "multiclient"))
+            {
+                Console.WriteLine("Start TCP MultiClient");
+                sw.Restart();
+                MultiClient();
+                sw.Stop();
+                Console.WriteLine($"duration={sw.ElapsedMilliseconds}");
+            }
             else
             {
                 Console.WriteLine("Start TCP Server");
@@ -51,6 +64,7 @@ namespace Task09_TCP
                 int nbytes = stream.Read(buff, 0, buff.Length);
                 string received = System.Text.Encoding.UTF8.GetString(buff, 0, nbytes);
                 //Console.WriteLine(received);
+                if (received == "exit") break;
 
                 // Посылаем
                 string message = "OK";
@@ -80,6 +94,56 @@ namespace Task09_TCP
             string received = System.Text.Encoding.UTF8.GetString(buff, 0, nbytes);
             //Console.WriteLine(received);
 
+            client.Close();
+        }
+        static void MultiServer()
+        {
+            TcpListener listener = new TcpListener(host, port);
+            listener.Start();
+            while(true)
+            {
+                var client = listener.AcceptTcpClient();
+                Console.WriteLine("client accepted");
+                var stream = client.GetStream();
+                byte[] buff = new byte[1000];
+
+                while(true)
+                {
+                    // Принимаем
+                    int nbytes = stream.Read(buff, 0, buff.Length);
+                    string received = System.Text.Encoding.UTF8.GetString(buff, 0, nbytes);
+
+                    // Посылаем
+                    string message = "OK";
+                    byte[] arr = System.Text.Encoding.ASCII.GetBytes(message);
+                    stream.Write(arr, 0, arr.Length);
+                    // Выход по команде
+                    if (received == "exit") break;
+                }
+                stream.Close();
+                client.Close();
+            }
+            //listener.Stop();
+        }
+        static void MultiClient()
+        {
+            TcpClient client = new TcpClient();
+            client.Connect(host, port);
+            Console.WriteLine("client connected");
+            var stream = client.GetStream();
+            byte[] buff = new byte[1000];
+            for (int i=0;i<10000;i++)
+            {
+                // Посылаем
+                string req = i==9999?"exit":"request";
+                byte[] arr = System.Text.Encoding.ASCII.GetBytes(req);
+                stream.Write(arr, 0, arr.Length);
+
+                // Принимаем
+                int nbytes = stream.Read(buff, 0, 3);// buff.Length);
+                string received = System.Text.Encoding.UTF8.GetString(buff, 0, nbytes);
+                //Console.WriteLine(received);
+            }
             client.Close();
         }
     }
