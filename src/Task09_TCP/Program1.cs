@@ -12,7 +12,7 @@ namespace Task09_TCP
         private static IPAddress host = IPAddress.Parse("127.0.0.1");
         private static int port = 5000;
         private static System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
-        static void Main(string[] args)
+        static void Main0(string[] args)
         {
             if (args.Any(s => s == "client"))
             {
