@@ -25,7 +25,7 @@ namespace Task10_StreamStorage
             {
                 var s1 = storage.CreateStream(out var n1);
 
-                files = Directory.GetFiles(@"C:\Users\Public\Pictures\Sample Pictures");
+                files = Directory.GetFiles(@"C:\home\syp\Syp2017\portraits");
                 numbers = new int[files.Length];
                 for (int i = 0; i < files.Length; i++)
                 {
