@@ -24,15 +24,15 @@ namespace Task04_Sequenses
             TableRelational table = new TableRelational(tp_person, () => System.IO.File.Open(tablegroup + fnom++, System.IO.FileMode.OpenOrCreate));
             //table.IndexInt(0);
             //table.IndexString(1);
-            table.Indexes(new int[] { 0 });
+            table.Indexes(new int[] { 0, 1 });
 
-            int nelements = 1_000_000;
-            bool toload = true; // Загружать или нет новую базу данных
+            int nelements = 10_000_000;
+            bool toload = false; // Загружать или нет новую базу данных
             if (toload)
             {
                 sw.Restart();
                 // Очистим ячейки последовательности и индекса 
-                table.Clear();
+                //table.Clear();
 
                 IEnumerable<object> flow = Enumerable.Range(0, nelements)
                     .Select(i =>
@@ -45,7 +45,7 @@ namespace Task04_Sequenses
                 table.Fill(flow);
 
                 // Теперь надо отсортировать индексный массив по ключу
-                table.BuildIndexes();
+                //table.BuildIndexes();
                 sw.Stop();
                 Console.WriteLine("Load ok. duration for {0} elements: {1} ms", nelements, sw.ElapsedMilliseconds);
             }
@@ -77,6 +77,28 @@ namespace Task04_Sequenses
                     .FirstOrDefault();
                 if (ob == null) throw new Exception("Didn't find person " + search_key);
                 string nam = (string)((object[])ob)[1];
+            }
+            sw.Stop();
+            Console.WriteLine($"Duration for {nprobe} search in {nelements} elements: {sw.ElapsedMilliseconds} ms");
+
+            string sk = "=" + search_key + "=";
+            ob = table.GetAllByKey(1, sk).FirstOrDefault();
+            //if (ob == null) throw new Exception("Didn't find person " + search_key);
+            Console.WriteLine("Person {0} has name {1}", search_key, ((object[])ob)[1]);
+
+
+            // Засечем скорость выборок
+            nprobe = 1000;
+            sw.Restart();
+            for (int i = 0; i < nprobe; i++)
+            {
+                search_key = rnd.Next(nelements) + 1;
+                string sample = "=" + search_key + "=";
+                ob = table.GetAllByKey(1, sample)
+                    .FirstOrDefault();
+                if (ob == null) throw new Exception("Didn't find person " + search_key);
+                string nam = (string)((object[])ob)[1];
+                if (nam != sample) throw new Exception($"nam != sample {nam} {sample}");
             }
             sw.Stop();
             Console.WriteLine($"Duration for {nprobe} search in {nelements} elements: {sw.ElapsedMilliseconds} ms");

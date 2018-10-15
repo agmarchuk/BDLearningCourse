@@ -65,48 +65,59 @@ namespace Task04_Sequenses
             }
             //BuildIndexes();
         }
-        public void IndexInt(int nom)
-        {
-            Func<object, int> keyproducer = v => (int)((object[])((object[])v)[1])[nom];
-            IndexKeyImmutable<int> ind_arr = new IndexKeyImmutable<int>(getstream())
-            {
-                Table = table,
-                KeyProducer = keyproducer,
-                Scale = null
-            };
-            //ind_arr_person.Scale = new ScaleCell(path + "person_ind") { IndexCell = ind_arr_person.IndexCell };
-            IndexDynamic<int, IndexKeyImmutable<int>> index = new IndexDynamic<int, IndexKeyImmutable<int>>(true, ind_arr);
-            table.RegisterIndex(index);
-        }
-        public void IndexString(int nom)
-        {
-            IndexHalfkeyImmutable<string> index_arr = new IndexHalfkeyImmutable<string>(getstream())
-            {
-                Table = table,
-                KeyProducer = v => (string)((object[])((object[])v)[1])[nom],
-                HalfProducer = v => Hashfunctions.HashRot13(v)
-            };
-            index_arr.Scale = new ScaleCell(getstream()) { IndexCell = index_arr.IndexCell };
-            IndexDynamic<string, IndexHalfkeyImmutable<string>> index =
-                new IndexDynamic<string, IndexHalfkeyImmutable<string>>(false, index_arr);
-            table.RegisterIndex(index);
-        }
-        public void Clear() { table.ClearIndexes(); table.Clear();  }
+        //public void IndexInt(int nom)
+        //{
+        //    Func<object, int> keyproducer = v => (int)((object[])((object[])v)[1])[nom];
+        //    IndexKeyImmutable<int> ind_arr = new IndexKeyImmutable<int>(getstream())
+        //    {
+        //        Table = table,
+        //        KeyProducer = keyproducer,
+        //        Scale = null
+        //    };
+        //    //ind_arr_person.Scale = new ScaleCell(path + "person_ind") { IndexCell = ind_arr_person.IndexCell };
+        //    IndexDynamic<int, IndexKeyImmutable<int>> index = new IndexDynamic<int, IndexKeyImmutable<int>>(true, ind_arr);
+        //    table.RegisterIndex(index);
+        //}
+        //public void IndexString(int nom)
+        //{
+        //    IndexHalfkeyImmutable<string> index_arr = new IndexHalfkeyImmutable<string>(getstream())
+        //    {
+        //        Table = table,
+        //        KeyProducer = v => (string)((object[])((object[])v)[1])[nom],
+        //        HalfProducer = v => Hashfunctions.HashRot13(v)
+        //    };
+        //    index_arr.Scale = new ScaleCell(getstream()) { IndexCell = index_arr.IndexCell };
+        //    IndexDynamic<string, IndexHalfkeyImmutable<string>> index =
+        //        new IndexDynamic<string, IndexHalfkeyImmutable<string>>(false, index_arr);
+        //    table.RegisterIndex(index);
+        //}
+        //public void Clear() { table.ClearIndexes(); table.Clear();  }
         public void Fill(IEnumerable<object> flow)
         {
+            table.ClearIndexes(); table.Clear();
             table.Fill(flow);
-        }
-        public void BuildIndexes()
-        {
             table.BuildIndexes();
         }
+        //public void BuildIndexes()
+        //{
+        //    table.BuildIndexes();
+        //}
         public IEnumerable<object> GetAllByKey(int column, object key)
         {
-            var index = allindexes[0];
+            int i;
+            for (i = 0; i < cnoms.Length; i++) if (cnoms[i] == column) break;
+            if (i == cnoms.Length) throw new Exception("Err: 938948");
+            
+            var index = allindexes[i];
             if (index is IndexDynamic<int, IndexKeyImmutable<int>>)
             {
                 IndexDynamic<int, IndexKeyImmutable<int>> ind = (IndexDynamic<int, IndexKeyImmutable<int>>)index;
                 return ind.GetAllByKey((int)key).Select(ent => ((object[])ent.Get())[1]);
+            }
+            else if (index is IndexDynamic<string, IndexHalfkeyImmutable<string>>)
+            {
+                IndexDynamic<string, IndexHalfkeyImmutable<string>> ind = (IndexDynamic<string, IndexHalfkeyImmutable<string>>)index;
+                return ind.GetAllByKey((string)key).Select(ent => ((object[])ent.Get())[1]);
             }
             return null;
             
