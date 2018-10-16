@@ -38,36 +38,55 @@ namespace Task13_TripleStore
                 return persons.Concat(photos).Concat(reflections);
             };
 
-            var fs = File.Open("data.bin", FileMode.OpenOrCreate);
-            var subj_ind = File.Open("subj_ind.bin", FileMode.OpenOrCreate);
-            var objj_ind = File.Open("obj_ind.bin", FileMode.OpenOrCreate);
-
             PType tp_triple = new PTypeRecord(
                 new NamedType("subject", new PType(PTypeEnumeration.sstring)),
                 new NamedType("predicate", new PType(PTypeEnumeration.sstring)),
                 new NamedType("object", new PType(PTypeEnumeration.sstring)));
-            PaCell triples = new PaCell(new PTypeSequence(tp_triple), fs, false);
-            Polar.CellIndexes.IndexHalfkeyImmutable<string> subj_index_arr = new IndexHalfkeyImmutable<string>(subj_ind)
-            {
-                //Table = triples,
-            };
+
+            string path = "data";
+            int nom = 0;
+            TableSimple triples = new TableSimple(tp_triple, new int[] { 0, 2 }, () => File.Open(path + (nom++), FileMode.OpenOrCreate));
+
 
             int npersons = 400_000;
 
             bool toload = true;
-            if (toload)
+            if (toload) // Загрузка данных
             {
-                // Загрузка данных
-                triples.Clear();
-                triples.Fill(new object[0]);
-                foreach (string[] triple in GenerateTriples(npersons))
-                {
-                    //Console.WriteLine($"{triple[0]} {triple[1]} {triple[2]} .");
-                    triples.Root.AppendElement(new object[] { triple[0], triple[1], triple[2] });
-                }
-                triples.Flush();
+                triples.Fill(GenerateTriples(npersons));
             }
 
+            string sample = "<p" + (npersons * 2 / 3) + ">";
+
+            var rfls = triples.GetAllByKey(2, sample).Where(r => (string)r[1] == "<reflected>");
+            foreach (object[] r in rfls) Console.WriteLine($"{r[0]} {r[1]} {r[2]}");
+            Console.WriteLine();
+
+            var indocs = rfls.SelectMany(r => triples.GetAllByKey(0, r[0])).Where(t => (string)t[1] == "<inphoto>");
+            foreach (object[] r in indocs) Console.WriteLine($"{r[0]} {r[1]} {r[2]}");
+            Console.WriteLine();
+
+            var phs = indocs.SelectMany(r => triples.GetAllByKey(0, r[2])).Where(t => (string)t[1] == "<name>");
+            foreach (object[] r in phs) Console.WriteLine($"{r[0]} {r[1]} {r[2]}");
+            Console.WriteLine();
+
+            // Теперь цикл по образцам
+            System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
+            int nsamples = 1000;
+            sw.Start();
+            int count = 0;
+            for (int i=0; i<nsamples; i++)
+            {
+                sample = "<p" + rnd.Next(npersons) + ">";
+                var que = triples.GetAllByKey(2, sample).Where(r => (string)r[1] == "<reflected>")
+                    .SelectMany(r => triples.GetAllByKey(0, r[0])).Where(t => (string)t[1] == "<inphoto>")
+                    .SelectMany(r => triples.GetAllByKey(0, r[2])).Where(t => (string)t[1] == "<name>");
+                //foreach (object[] r in que) Console.WriteLine($"{r[0]} {r[1]} {r[2]}");
+                //Console.WriteLine();
+                count += que.Count();
+            }
+            sw.Stop();
+            Console.WriteLine($"count={count} duration={sw.ElapsedMilliseconds}");
 
         }
     }

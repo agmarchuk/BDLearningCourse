@@ -6,7 +6,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="PolarDB" Version="1.0.2" />
+    <Reference Include="Polar.CellIndexes">
+      <HintPath>..\..\..\PolarDB\src\Polar.CellIndexes\bin\Release\netstandard2.0\Polar.CellIndexes.dll</HintPath>
+    </Reference>
+    <Reference Include="Polar.Cells">
+      <HintPath>..\..\..\PolarDB\src\Polar.CellIndexes\bin\Release\netstandard2.0\Polar.Cells.dll</HintPath>
+    </Reference>
+    <Reference Include="Polar.DB">
+      <HintPath>..\..\..\PolarDB\src\Polar.CellIndexes\bin\Release\netstandard2.0\Polar.DB.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

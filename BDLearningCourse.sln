@@ -36,7 +36,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Task12_Nametable", "src\Tas
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Task13_TripleStore", "src\Task13_TripleStore\Task13_TripleStore.csproj", "{C1DC8523-6071-4C3D-A716-3A525A182C26}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Task00_PolarLinks", "Task00_PolarLinks\Task00_PolarLinks.csproj", "{C909F774-03A0-4992-B9E9-B653A5626411}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Task00_PolarLinks", "Task00_PolarLinks\Task00_PolarLinks.csproj", "{C909F774-03A0-4992-B9E9-B653A5626411}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

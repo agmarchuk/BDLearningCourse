@@ -8,7 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="PolarDB" Version="1.0.2" />
+    <PackageReference Include="Polar.DB"  Version="1.0.1"  />
+    <PackageReference Include="Polar.Cells"  Version="1.0.0" />
+    <PackageReference Include="Polar.CellIndexes"  Version="1.0.2" />
+    <PackageReference Include="Polar.PagedStreams"  Version="1.0.0" />
   </ItemGroup>
 
 </Project>
