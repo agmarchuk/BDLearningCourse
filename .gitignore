@@ -12,3 +12,5 @@ databases
 /.vscode
 /src/Task08_JSON/*.json
 /src/Task08_JSON/*.bson
+/Resources/zaliznyak_shortform.txt
+/Databases/*
