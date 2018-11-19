@@ -139,6 +139,4 @@ namespace Task08_JSON
         public string name { get; set; }
         public int age { get; set; }
     }
-
-
 }
