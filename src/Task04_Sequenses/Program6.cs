@@ -19,7 +19,7 @@ namespace Task04_Sequenses
                 new NamedType("id", new PType(PTypeEnumeration.integer)),
                 new NamedType("name", new PType(PTypeEnumeration.sstring)),
                 new NamedType("age", new PType(PTypeEnumeration.real)));
-            string tablegroup = "../../../" + path + "data";
+            string tablegroup = /*"../../../" +*/ path + "data";
             int fnom = 0;
             TableRelational table = new TableRelational(tp_person, () => System.IO.File.Open(tablegroup + fnom++, System.IO.FileMode.OpenOrCreate));
             //table.IndexInt(0);
@@ -27,7 +27,7 @@ namespace Task04_Sequenses
             table.Indexes(new int[] { 0, 1 });
 
             int nelements = 10_000_000;
-            bool toload = false; // Загружать или нет новую базу данных
+            bool toload = true; // Загружать или нет новую базу данных
             if (toload)
             {
                 sw.Restart();
@@ -63,7 +63,7 @@ namespace Task04_Sequenses
             //    .Select(ent => ((object[])ent.Get())[1])
             //    .FirstOrDefault();
             var ob = table.GetAllByKey(0, search_key).FirstOrDefault();
-            //if (ob == null) throw new Exception("Didn't find person " + search_key);
+            if (ob == null) throw new Exception("Didn't find person " + search_key);
             Console.WriteLine("Person {0} has name {1}", search_key, ((object[])ob)[1]);
 
 
