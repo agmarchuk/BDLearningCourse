@@ -1,0 +1,11 @@
+<database>
+    <person id="1">
+        <name>Иванов</name>
+    </person>
+    <person id="2">
+        <name>Петров</name>
+    </person>
+    <person id="3">
+        <name>Сидоров</name>
+    </person>
+</database>
